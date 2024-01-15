@@ -27,12 +27,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="accident: ${accidents}">
-                        <td th:text="${accident.getValue().getId}"></td>
-                        <td th:text="${accident.getValue().getName}"></td>
-                        <td th:text="${accident.getValue().getText}"></td>
-                        <td th:text="${accident.getValue().getAddress}"></td>
-                    </tr>
+                        <tr th:each="accident: ${accidents}">
+                            <td th:text="${accident.getId}"></td>
+                            <td th:text="${accident.getName}"></td>
+                            <td th:text="${accident.getText}"></td>
+                            <td th:text="${accident.getAddress}"></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

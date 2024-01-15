@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.repository.AccidentMemRepository;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -19,7 +19,7 @@ public class SimpleAccidentService implements AccidentService {
     }
 
     @Override
-    public ConcurrentHashMap<Integer, Accident> findAll() {
+    public List<Accident> findAll() {
         return accidentMemRepository.findAll();
     }
 }

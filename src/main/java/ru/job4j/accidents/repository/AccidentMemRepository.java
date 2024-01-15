@@ -5,15 +5,17 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.model.Accident;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Repository
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccidentMemRepository implements AccidentRepository {
 
-    private ConcurrentHashMap<Integer, Accident> accidents = new ConcurrentHashMap<>();
+    private Map<Integer, Accident> accidents = new ConcurrentHashMap<>();
 
     @Override
     public void save(Accident accident) {
@@ -24,7 +26,7 @@ public class AccidentMemRepository implements AccidentRepository {
     }
 
     @Override
-    public ConcurrentHashMap<Integer, Accident> findAll() {
-        return accidents;
+    public List<Accident> findAll() {
+        return accidents.entrySet().stream().map(x -> x.getValue()).collect(Collectors.toList());
     }
 }
