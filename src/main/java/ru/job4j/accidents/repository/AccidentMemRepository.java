@@ -29,4 +29,15 @@ public class AccidentMemRepository implements AccidentRepository {
     public List<Accident> findAll() {
         return accidents.entrySet().stream().map(x -> x.getValue()).collect(Collectors.toList());
     }
+
+    @Override
+    public boolean update(Accident accident) {
+        accidents.put(accident.getId(), accident);
+        return accidents.get(accident.getId()).equals(accident);
+    }
+
+    @Override
+    public Accident getById(int id) {
+        return accidents.getOrDefault(id, null);
+    }
 }

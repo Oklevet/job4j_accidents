@@ -8,5 +8,9 @@ public interface AccidentRepository {
 
     void save(Accident accident);
 
+    boolean update(Accident accident);
+
+    Accident getById(int id);
+
     List<Accident> findAll();
 }

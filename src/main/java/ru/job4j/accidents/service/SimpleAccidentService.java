@@ -19,7 +19,17 @@ public class SimpleAccidentService implements AccidentService {
     }
 
     @Override
+    public boolean update(Accident accident) {
+        return accidentMemRepository.update(accident);
+    }
+
+    @Override
     public List<Accident> findAll() {
         return accidentMemRepository.findAll();
+    }
+
+    @Override
+    public Accident getById(int id) {
+        return accidentMemRepository.getById(id);
     }
 }
