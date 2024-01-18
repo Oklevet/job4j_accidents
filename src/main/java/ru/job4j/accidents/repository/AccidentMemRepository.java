@@ -18,6 +18,7 @@ public class AccidentMemRepository implements AccidentRepository {
     private Map<Integer, Accident> accidents = new ConcurrentHashMap<>();
 
     private Map<Integer, AccidentType> accTypes = new ConcurrentHashMap<>();
+
     {
         accTypes.put(1, new AccidentType(1, "Две машины"));
         accTypes.put(2, new AccidentType(2, "Машина и человек"));
@@ -25,6 +26,7 @@ public class AccidentMemRepository implements AccidentRepository {
     }
 
     private Map<Integer, Rule> rules = new ConcurrentHashMap<>();
+
     {
         rules.put(1, new Rule(1, "Статья. 1"));
         rules.put(2, new Rule(2, "Статья. 2"));
