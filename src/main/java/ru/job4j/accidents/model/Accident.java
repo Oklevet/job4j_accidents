@@ -2,6 +2,7 @@ package ru.job4j.accidents.model;
 
 import lombok.*;
 import javax.persistence.*;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -19,4 +20,5 @@ public class Accident {
     private String text;
     private String address;
     private AccidentType type;
+    private Set<Rule> rules;
 }

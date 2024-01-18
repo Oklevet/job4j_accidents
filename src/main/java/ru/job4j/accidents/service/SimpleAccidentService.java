@@ -15,8 +15,8 @@ public class SimpleAccidentService implements AccidentService {
     private AccidentMemRepository accidentMemRepository;
 
     @Override
-    public void save(Accident accident) {
-        accidentMemRepository.save(accident);
+    public void save(Accident accident, String[] ids) {
+        accidentMemRepository.save(accident, ids);
     }
 
     @Override

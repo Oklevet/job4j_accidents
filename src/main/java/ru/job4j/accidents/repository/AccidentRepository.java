@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface AccidentRepository {
 
-    void save(Accident accident);
+    void save(Accident accident, String[] ids);
 
     boolean update(Accident accident);
 
