@@ -26,7 +26,7 @@ public class AccidentMemRepository implements AccidentRepository {
 
     @Override
     public List<Accident> findAll() {
-        return accidents.entrySet().stream().map(x -> x.getValue()).collect(Collectors.toList());
+        return (List<Accident>) accidents.values();
     }
 
     @Override
