@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.model.Accident;
+import ru.job4j.accidents.model.AccidentType;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,8 +16,15 @@ public class AccidentMemRepository implements AccidentRepository {
 
     private Map<Integer, Accident> accidents = new ConcurrentHashMap<>();
 
+    private Map<Integer, AccidentType> accTypes = new HashMap<>();
+    {
+        accTypes.put(1, new AccidentType(1, "Две машины"));
+        accTypes.put(2, new AccidentType(2, "Машина и человек"));
+        accTypes.put(3, new AccidentType(3, "Машина и велосипед"));
+    }
     @Override
     public void save(Accident accident) {
+        accident.setType(accTypes.get(accident.getType().getId()));
         int id = accidents.keySet().stream().max(Comparator.naturalOrder()).orElse(0);
         accident.setId(++id);
         accidents.put(id, accident);
@@ -30,6 +38,7 @@ public class AccidentMemRepository implements AccidentRepository {
     @Override
     public boolean update(Accident accident) {
         accidents.computeIfPresent(accident.getId(), (a, b) -> b = accident);
+        accident.setType(accTypes.get(accident.getType()));
         return accidents.get(accident.getId()).equals(accident);
     }
 
