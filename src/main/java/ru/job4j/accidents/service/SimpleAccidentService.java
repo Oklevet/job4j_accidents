@@ -6,6 +6,7 @@ import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.repository.AccidentMemRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -29,7 +30,7 @@ public class SimpleAccidentService implements AccidentService {
     }
 
     @Override
-    public Accident getById(int id) {
+    public Optional<Accident> getById(int id) {
         return accidentMemRepository.getById(id);
     }
 }

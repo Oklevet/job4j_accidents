@@ -31,7 +31,7 @@ public class AccidentController {
 
     @GetMapping("/{id}")
     public String getById(Model model, @PathVariable int id) {
-        Accident accident = accidentService.getById(id);
+        Accident accident = accidentService.getById(id).get();
         if (accident == null) {
             model.addAttribute("message", "Инцидент с указанным идентификатором не найден");
             return "errors/404";
