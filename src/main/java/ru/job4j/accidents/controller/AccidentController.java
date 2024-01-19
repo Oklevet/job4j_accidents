@@ -12,6 +12,7 @@ import ru.job4j.accidents.service.AccidentService;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
@@ -49,12 +50,12 @@ public class AccidentController {
 
     @GetMapping("/{id}")
     public String getById(Model model, @PathVariable int id) {
-        Accident accident = accidentService.getById(id).get();
-        if (accident == null) {
+        Optional<Accident> optAccident = accidentService.getById(id);
+        if (optAccident.isEmpty()) {
             model.addAttribute("message", "Инцидент с указанным идентификатором не найден");
             return "errors/404";
         }
-        model.addAttribute("task", accident);
+        model.addAttribute("task", optAccident.get());
         return "create/editAccident";
     }
 
