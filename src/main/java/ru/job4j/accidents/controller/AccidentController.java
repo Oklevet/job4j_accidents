@@ -61,7 +61,12 @@ public class AccidentController {
 
     @GetMapping("/editAccident")
     public String update(@RequestParam("id") int id, Model model) {
-        model.addAttribute("accident", accidentService.getById(id));
+        Optional<Accident> optAccident = accidentService.getById(id);
+        if (optAccident.isEmpty()) {
+            model.addAttribute("message", "Инцидент с указанным идентификатором не найден");
+            return "errors/404";
+        }
+        model.addAttribute("accident", optAccident.get());
         return "create/editAccident";
     }
 }
