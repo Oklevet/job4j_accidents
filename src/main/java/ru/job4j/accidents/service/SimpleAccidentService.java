@@ -27,15 +27,22 @@ public class SimpleAccidentService implements AccidentService {
 
         Arrays.stream(ids).forEach(x -> accRules.add(rulesUtility.getRules().get(Integer.parseInt(x))));
         accident.setRules(accRules);
+
         accidentRepository.save(accident, ids);
     }
 
     @Override
-    public boolean update(Accident accident) {
+    public boolean update(Accident accident, String[] ids) {
         AccidentTypeUtility accTypeUtil = new AccidentTypeUtility();
+        RulesUtility rulesUtility = new RulesUtility();
+        Set<Rule> accRules = new HashSet<>();
 
-        accident.setType(accTypeUtil.getAccTypes().get(accident.getType()));
-        return accidentRepository.update(accident);
+        accident.setType(accTypeUtil.getAccTypes().get(accident.getType().getId()));
+
+        Arrays.stream(ids).forEach(x -> accRules.add(rulesUtility.getRules().get(Integer.parseInt(x))));
+        accident.setRules(accRules);
+
+        return accidentRepository.update(accident, ids);
     }
 
     @Override

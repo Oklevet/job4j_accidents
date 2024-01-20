@@ -9,7 +9,7 @@ public interface AccidentService {
 
     void save(Accident accident, String[] ids);
 
-    boolean update(Accident accident);
+    boolean update(Accident accident, String[] ids);
 
     Optional<Accident> getById(int id);
 

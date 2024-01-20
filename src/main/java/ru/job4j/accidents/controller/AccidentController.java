@@ -33,32 +33,37 @@ public class AccidentController {
         return "create/createAccident";
     }
 
-    @PostMapping({"/saveAccident", "/updateAccident"})
+    @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident, HttpServletRequest req) {
         String[] ids = req.getParameterValues("rIds");
         accidentService.save(accident, ids);
         return "redirect:/accidents";
     }
 
-    @GetMapping("/{id}")
-    public String getById(Model model, @PathVariable int id) {
+    @GetMapping("/editAccident")
+    public String edit(@RequestParam("id") int id, Model model) {
         Optional<Accident> optAccident = accidentService.getById(id);
         if (optAccident.isEmpty()) {
             model.addAttribute("message", "Инцидент с указанным идентификатором не найден");
             return "errors/404";
         }
-        model.addAttribute("task", optAccident.get());
+        AccidentTypeUtility accidentTypeUtility = new AccidentTypeUtility();
+        model.addAttribute("types", accidentTypeUtility.getListAccTypes());
+
+        RulesUtility rulesUtility = new RulesUtility();
+        model.addAttribute("rules", rulesUtility.getListRules());
+        model.addAttribute("accident", optAccident.get());
         return "create/editAccident";
     }
 
-    @GetMapping("/editAccident")
-    public String update(@RequestParam("id") int id, Model model) {
-        Optional<Accident> optAccident = accidentService.getById(id);
-        if (optAccident.isEmpty()) {
+    @PostMapping("/updateAccident")
+    public String update(@ModelAttribute Accident accident, Model model, HttpServletRequest req) {
+        String[] ids = req.getParameterValues("rIds");
+        var isUpdated = accidentService.update(accident, ids);
+        if (!isUpdated) {
             model.addAttribute("message", "Инцидент с указанным идентификатором не найден");
             return "errors/404";
         }
-        model.addAttribute("accident", optAccident.get());
-        return "create/editAccident";
+        return "redirect:/accidents";
     }
 }

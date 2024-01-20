@@ -17,7 +17,7 @@ public class AccidentMemRepository implements AccidentRepository {
     }
 
     @Override
-    public boolean update(Accident accident) {
+    public boolean update(Accident accident, String[] ids) {
         return true;
     }
 

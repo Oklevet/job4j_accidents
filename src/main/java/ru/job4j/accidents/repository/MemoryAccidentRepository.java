@@ -32,7 +32,7 @@ public class MemoryAccidentRepository implements AccidentRepository {
     }
 
     @Override
-    public boolean update(Accident accident) {
+    public boolean update(Accident accident, String[] ids) {
         accidents.computeIfPresent(accident.getId(), (a, b) -> b = accident);
         return accidents.get(accident.getId()).equals(accident);
     }

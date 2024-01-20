@@ -31,7 +31,10 @@
                         <tbody>
                             <tr th:each="accident: ${accidents}">
                                 <td th:text="${accident.getId}"></td>
-                                <td th:text="${accident.getName}"></td>
+                                <td><a th:text="${accident.getName}" th:href="@{|/editAccident?id=${accident.id}|}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                </td>
                                 <td th:text="${accident.getText}"></td>
                                 <td th:text="${accident.getAddress}"></td>
                                 <td th:text="${accident.getType().getName()}"></td>
