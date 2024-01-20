@@ -1,13 +1,19 @@
-package ru.job4j.accidents.utility;
+package ru.job4j.accidents.repository;
 
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.model.AccidentType;
 
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class AccidentTypeUtility {
+@ThreadSafe
+@Repository
+@NoArgsConstructor
+public class MemoryTypesRepository implements TypesRepository {
 
     private Map<Integer, AccidentType> accTypes = new ConcurrentHashMap<>();
 
@@ -17,10 +23,12 @@ public class AccidentTypeUtility {
         accTypes.put(3, new AccidentType(3, "Машина и велосипед"));
     }
 
+    @Override
     public Map<Integer, AccidentType> getAccTypes() {
-        return accTypes;
+        return new ConcurrentHashMap<>(accTypes);
     }
 
+    @Override
     public List<AccidentType> getListAccTypes() {
         return new ArrayList<>(accTypes.values());
     }

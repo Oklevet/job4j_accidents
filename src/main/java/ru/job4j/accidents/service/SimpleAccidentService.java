@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.model.Rule;
-import ru.job4j.accidents.repository.AccidentMemRepository;
 import ru.job4j.accidents.repository.AccidentRepository;
-import ru.job4j.accidents.utility.AccidentTypeUtility;
-import ru.job4j.accidents.utility.RulesUtility;
+import ru.job4j.accidents.repository.RulesRepository;
+import ru.job4j.accidents.repository.MemoryTypesRepository;
+import ru.job4j.accidents.repository.TypesRepository;
 
 import java.util.*;
 
@@ -17,15 +17,17 @@ public class SimpleAccidentService implements AccidentService {
 
     private AccidentRepository accidentRepository;
 
+    private RulesRepository rulesRepository;
+
+    private TypesRepository typesRepository;
+
     @Override
     public void save(Accident accident, String[] ids) {
-        AccidentTypeUtility accTypeUtil = new AccidentTypeUtility();
-        RulesUtility rulesUtility = new RulesUtility();
         Set<Rule> accRules = new HashSet<>();
 
-        accident.setType(accTypeUtil.getAccTypes().get(accident.getType().getId()));
+        accident.setType(typesRepository.getAccTypes().get(accident.getType().getId()));
 
-        Arrays.stream(ids).forEach(x -> accRules.add(rulesUtility.getRules().get(Integer.parseInt(x))));
+        Arrays.stream(ids).forEach(x -> accRules.add(rulesRepository.getRules().get(Integer.parseInt(x))));
         accident.setRules(accRules);
 
         accidentRepository.save(accident, ids);
@@ -33,13 +35,12 @@ public class SimpleAccidentService implements AccidentService {
 
     @Override
     public boolean update(Accident accident, String[] ids) {
-        AccidentTypeUtility accTypeUtil = new AccidentTypeUtility();
-        RulesUtility rulesUtility = new RulesUtility();
+        MemoryTypesRepository accTypeUtil = new MemoryTypesRepository();
         Set<Rule> accRules = new HashSet<>();
 
-        accident.setType(accTypeUtil.getAccTypes().get(accident.getType().getId()));
+        accident.setType(typesRepository.getAccTypes().get(accident.getType().getId()));
 
-        Arrays.stream(ids).forEach(x -> accRules.add(rulesUtility.getRules().get(Integer.parseInt(x))));
+        Arrays.stream(ids).forEach(x -> accRules.add(rulesRepository.getRules().get(Integer.parseInt(x))));
         accident.setRules(accRules);
 
         return accidentRepository.update(accident, ids);

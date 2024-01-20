@@ -5,9 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.accidents.model.Accident;
+import ru.job4j.accidents.repository.RulesRepository;
+import ru.job4j.accidents.repository.TypesRepository;
 import ru.job4j.accidents.service.AccidentService;
-import ru.job4j.accidents.utility.AccidentTypeUtility;
-import ru.job4j.accidents.utility.RulesUtility;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -17,6 +17,10 @@ import java.util.Optional;
 public class AccidentController {
     private final AccidentService accidentService;
 
+    private RulesRepository rulesRepository;
+
+    private TypesRepository typesRepository;
+
     @GetMapping({"/accidents"})
     public String getIndex(Model model) {
         model.addAttribute("accidents", accidentService.findAll());
@@ -25,11 +29,8 @@ public class AccidentController {
 
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
-        AccidentTypeUtility accidentTypeUtility = new AccidentTypeUtility();
-        model.addAttribute("types", accidentTypeUtility.getListAccTypes());
-
-        RulesUtility rulesUtility = new RulesUtility();
-        model.addAttribute("rules", rulesUtility.getListRules());
+        model.addAttribute("types", typesRepository.getListAccTypes());
+        model.addAttribute("rules", rulesRepository.getListRules());
         return "create/createAccident";
     }
 
@@ -47,11 +48,8 @@ public class AccidentController {
             model.addAttribute("message", "Инцидент с указанным идентификатором не найден");
             return "errors/404";
         }
-        AccidentTypeUtility accidentTypeUtility = new AccidentTypeUtility();
-        model.addAttribute("types", accidentTypeUtility.getListAccTypes());
-
-        RulesUtility rulesUtility = new RulesUtility();
-        model.addAttribute("rules", rulesUtility.getListRules());
+        model.addAttribute("types", typesRepository.getListAccTypes());
+        model.addAttribute("rules", rulesRepository.getListRules());
         model.addAttribute("accident", optAccident.get());
         return "create/editAccident";
     }

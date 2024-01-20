@@ -1,18 +1,20 @@
-package ru.job4j.accidents.utility;
+package ru.job4j.accidents.repository;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ru.job4j.accidents.model.AccidentType;
+import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.model.Rule;
 
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Getter
+@ThreadSafe
+@Repository
 @NoArgsConstructor
-public class RulesUtility {
+public class MemoryRulesRepository implements RulesRepository {
 
     private Map<Integer, Rule> rules = new ConcurrentHashMap<>();
 
@@ -22,10 +24,12 @@ public class RulesUtility {
         rules.put(3, new Rule(3, "Статья. 3"));
     }
 
+    @Override
     public Map<Integer, Rule> getRules() {
-        return rules;
+        return new ConcurrentHashMap<>(rules);
     }
 
+    @Override
     public List<Rule> getListRules() {
         return new ArrayList<>(rules.values());
     }
