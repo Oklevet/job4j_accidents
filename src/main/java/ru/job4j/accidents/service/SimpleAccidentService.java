@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.model.Rule;
 import ru.job4j.accidents.repository.AccidentMemRepository;
+import ru.job4j.accidents.repository.AccidentRepository;
 import ru.job4j.accidents.utility.AccidentTypeUtility;
 import ru.job4j.accidents.utility.RulesUtility;
 
@@ -14,7 +15,7 @@ import java.util.*;
 @AllArgsConstructor
 public class SimpleAccidentService implements AccidentService {
 
-    private AccidentMemRepository accidentMemRepository;
+    private AccidentRepository accidentRepository;
 
     @Override
     public void save(Accident accident, String[] ids) {
@@ -26,7 +27,7 @@ public class SimpleAccidentService implements AccidentService {
 
         Arrays.stream(ids).forEach(x -> accRules.add(rulesUtility.getRules().get(Integer.parseInt(x))));
         accident.setRules(accRules);
-        accidentMemRepository.save(accident, ids);
+        accidentRepository.save(accident, ids);
     }
 
     @Override
@@ -34,16 +35,16 @@ public class SimpleAccidentService implements AccidentService {
         AccidentTypeUtility accTypeUtil = new AccidentTypeUtility();
 
         accident.setType(accTypeUtil.getAccTypes().get(accident.getType()));
-        return accidentMemRepository.update(accident);
+        return accidentRepository.update(accident);
     }
 
     @Override
     public List<Accident> findAll() {
-        return accidentMemRepository.findAll();
+        return accidentRepository.findAll();
     }
 
     @Override
     public Optional<Accident> getById(int id) {
-        return accidentMemRepository.getById(id);
+        return accidentRepository.getById(id);
     }
 }
