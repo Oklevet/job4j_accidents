@@ -25,7 +25,7 @@ public class SimpleAccidentService implements AccidentService {
     public void save(Accident accident, String[] ids) {
         Set<Rule> accRules = new HashSet<>();
 
-        accident.setType(typesRepository.getAccTypes().get(accident.getType().getId()));
+        accident.setType(typesRepository.getAccType(accident.getType().getId()));
 
         Arrays.stream(ids).forEach(x -> accRules.add(rulesRepository.getRules().get(Integer.parseInt(x))));
         accident.setRules(accRules);
@@ -38,7 +38,7 @@ public class SimpleAccidentService implements AccidentService {
         MemoryTypesRepository accTypeUtil = new MemoryTypesRepository();
         Set<Rule> accRules = new HashSet<>();
 
-        accident.setType(typesRepository.getAccTypes().get(accident.getType().getId()));
+        accident.setType(typesRepository.getAccType(accident.getType().getId()));
 
         Arrays.stream(ids).forEach(x -> accRules.add(rulesRepository.getRules().get(Integer.parseInt(x))));
         accident.setRules(accRules);

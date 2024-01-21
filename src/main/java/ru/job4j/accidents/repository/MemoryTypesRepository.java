@@ -24,8 +24,8 @@ public class MemoryTypesRepository implements TypesRepository {
     }
 
     @Override
-    public Map<Integer, AccidentType> getAccTypes() {
-        return new ConcurrentHashMap<>(accTypes);
+    public AccidentType getAccType(int id) {
+        return accTypes.get(id);
     }
 
     @Override
