@@ -32,12 +32,13 @@ public class MemoryAccidentRepository implements AccidentRepository {
 
     @Override
     public boolean update(Accident accident, String[] ids) {
-        accidents.computeIfPresent(accident.getId(), (a, b) -> b = accident);
-        return accidents.get(accident.getId()).equals(accident);
+        return accidents.computeIfPresent(accident.getId(), (id, oldAcc) ->
+                new Accident(oldAcc.getId(), accident.getName(), accident.getText(), accident.getAddress(),
+                        accident.getType(), accident.getRules())) != null;
     }
 
     @Override
     public Optional<Accident> getById(int id) {
-        return Optional.ofNullable(accidents.getOrDefault(id, null));
+        return Optional.ofNullable(accidents.get(id));
     }
 }
