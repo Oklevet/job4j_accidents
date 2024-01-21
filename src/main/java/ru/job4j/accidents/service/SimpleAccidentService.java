@@ -27,9 +27,8 @@ public class SimpleAccidentService implements AccidentService {
 
         accident.setType(typesRepository.getAccType(accident.getType().getId()));
 
-        Arrays.stream(ids).forEach(x -> accRules.add(rulesRepository.getRules().get(Integer.parseInt(x))));
+        Arrays.stream(ids).forEach(x -> accRules.add(rulesRepository.getRule(Integer.parseInt(x))));
         accident.setRules(accRules);
-
         accidentRepository.save(accident, ids);
     }
 
@@ -40,9 +39,8 @@ public class SimpleAccidentService implements AccidentService {
 
         accident.setType(typesRepository.getAccType(accident.getType().getId()));
 
-        Arrays.stream(ids).forEach(x -> accRules.add(rulesRepository.getRules().get(Integer.parseInt(x))));
+        Arrays.stream(ids).forEach(x -> accRules.add(rulesRepository.getRule(Integer.parseInt(x))));
         accident.setRules(accRules);
-
         return accidentRepository.update(accident, ids);
     }
 

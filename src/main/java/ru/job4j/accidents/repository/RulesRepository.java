@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface RulesRepository {
 
-    Map<Integer, Rule> getRules();
+    Rule getRule(int id);
 
     List<Rule> getListRules();
 }

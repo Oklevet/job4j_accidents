@@ -25,8 +25,8 @@ public class MemoryRulesRepository implements RulesRepository {
     }
 
     @Override
-    public Map<Integer, Rule> getRules() {
-        return new ConcurrentHashMap<>(rules);
+    public Rule getRule(int id) {
+        return rules.get(id);
     }
 
     @Override
