@@ -1,15 +1,13 @@
 package ru.job4j.accidents.repository;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.model.Rule;
 
 import javax.annotation.concurrent.ThreadSafe;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @ThreadSafe
 @Repository
@@ -25,8 +23,10 @@ public class MemoryRulesRepository implements RulesRepository {
     }
 
     @Override
-    public Rule getRule(int id) {
-        return rules.get(id);
+    public Set<Rule> getSetRule(String[] ids) {
+        return Arrays.stream(ids)
+                .map(x -> rules.get(Integer.parseInt(x)))
+                .collect(Collectors.toSet());
     }
 
     @Override
