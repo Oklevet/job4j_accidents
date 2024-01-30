@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface AccidentServiceDB {
 
-    void create(Accident accident);
+    void create(Accident accident, String[] ids);
 
     List<Accident> findAll();
 

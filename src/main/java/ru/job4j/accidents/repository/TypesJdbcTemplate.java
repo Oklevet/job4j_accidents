@@ -16,7 +16,6 @@ public class TypesJdbcTemplate implements TypesTemplate {
 
     @Override
     public Collection<AccidentType> findAllTypes() {
-        System.out.println("Type DB findAllTypes");
         return jdbc.query("select id, name from accident_type",
                 (rs, row) -> {
                     AccidentType accidentType = new AccidentType();
@@ -28,7 +27,6 @@ public class TypesJdbcTemplate implements TypesTemplate {
 
     @Override
     public Optional<AccidentType> findById(int id) {
-        System.out.println("Type DB findById");
         jdbc.query("select id, name from accident_type where id = :id",
                 (rs, row) -> {
                     AccidentType accidentType = new AccidentType();

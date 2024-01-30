@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface AccidentTemplate {
 
-    Accident save(Accident accident);
+    Accident save(Accident accident, String[] ids);
 
     List<Accident> getAll();
 
