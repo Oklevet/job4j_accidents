@@ -1,0 +1,18 @@
+package ru.job4j.accidents.mapper;
+
+import org.springframework.jdbc.core.RowMapper;
+import ru.job4j.accidents.model.Rule;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class RulesListByAccMapper implements RowMapper<Rule> {
+
+    @Override
+    public Rule mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Rule rule = new Rule();
+        rule.setId(rs.getInt("idd"));
+        rule.setName(rs.getString("name"));
+        return rule;
+    }
+}

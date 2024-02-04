@@ -2,16 +2,15 @@ package ru.job4j.accidents.repository;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import ru.job4j.accidents.mapper.AccidentListMapper;
+import ru.job4j.accidents.mapper.AccidentMapper;
+import ru.job4j.accidents.mapper.AddressTypeIDMapper;
 import ru.job4j.accidents.model.Accident;
-import ru.job4j.accidents.model.AccidentType;
-import ru.job4j.accidents.model.Rule;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Repository
 @AllArgsConstructor
@@ -26,7 +25,7 @@ public class AccidentJdbcTemplate implements AccidentTemplate {
 
         Arrays.stream(ids).forEach(x -> {
                 jdbc.update("insert into accident_rules (accidents_id, rule_id) values (?, ?)",
-                        AccidentJdbcTemplate.getIdByNameTxtAddressType(accident, jdbc),
+                        AccidentJdbcTemplate.getIdByNameTxtAddressType(accident, jdbc).get(),
                         Integer.parseInt(x));
         });
         return accident;
@@ -39,20 +38,13 @@ public class AccidentJdbcTemplate implements AccidentTemplate {
     @Override
     public List<Accident> getAll() {
         RulesTemplate rulesTemplate = new RulesJdbcTemplate(jdbc);
-        return jdbc.query("select a.id id, a.name name, a.text text, a.address address, a.type_id type_id, at.name "
-                        + "type_name from accidents a, accident_type at where a.type_id = at.id",
-                (rs, row) -> {
-                    Accident accident = new Accident();
-                    Set<Rule> rules = new HashSet<>(rulesTemplate.findByAcc(rs.getInt("id")));
-                    accident.setId(rs.getInt("id"));
-                    accident.setName(rs.getString("name"));
-                    accident.setText(rs.getString("text"));
-                    accident.setAddress(rs.getString("address"));
-                    accident.setType(new AccidentType(rs.getInt("type_id"),
-                            rs.getString("type_name")));
-                    accident.setRules(rules);
-                    return accident;
-                });
+        try {
+            return jdbc.query("select a.id id, a.name name, a.text text, a.address address, a.type_id type_id, at.name "
+                            + "type_name from accidents a, accident_type at where a.type_id = at.id",
+                    new AccidentListMapper(rulesTemplate));
+        } catch (Exception e) {
+            return List.of();
+        }
     }
 
     @Override
@@ -80,31 +72,22 @@ public class AccidentJdbcTemplate implements AccidentTemplate {
 
     @Override
     public Optional<Accident> getById(int id) {
-        AtomicReference<Optional<Accident>> oAcc = new AtomicReference<>(Optional.empty());
-        jdbc.query("select a.id id, a.name name, a.text text, a.address address, a.type_id type_id, at.name "
-                        + "type_name from accidents a, accident_type at where a.id = ? and a.type_id = at.id",
-                (rs, row) -> {
-                    Accident accident = new Accident();
-                    accident.setId(rs.getInt("id"));
-                    accident.setName(rs.getString("name"));
-                    accident.setText(rs.getString("text"));
-                    accident.setAddress(rs.getString("address"));
-                    accident.setType(new AccidentType(rs.getInt("type_id"),
-                            rs.getString("type_name")));
-                    oAcc.set(Optional.ofNullable(accident));
-                    return oAcc;
-                }, id);
-        return oAcc.get();
+        try {
+            return Optional.ofNullable(jdbc.queryForObject("select a.id id, a.name name, a.text text, a.address address, a.type_id type_id, at.name "
+                            + "type_name from accidents a, accident_type at where a.id = ? and a.type_id = at.id",
+                    new AccidentMapper(), id));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
-    public static int getIdByNameTxtAddressType(Accident accident, JdbcTemplate jdbc) {
-        AtomicInteger result = new AtomicInteger(-1);
-        jdbc.query("select a.id idd "
-                        + "from accidents a where a.name = ? and a.text = ? and a.address = ? and a.type_id = ? ",
-                (rs, row) -> {
-                    result.set(rs.getInt("idd"));
-                    return result;
-                }, accident.getName(), accident.getText(), accident.getAddress(), accident.getType().getId());
-        return result.get();
+    public static Optional<Integer> getIdByNameTxtAddressType(Accident accident, JdbcTemplate jdbc) {
+        try {
+            return Optional.ofNullable(jdbc.queryForObject("select a.id idd "
+                            + "from accidents a where a.name = ? and a.text = ? and a.address = ? and a.type_id = ? ",
+                    new AddressTypeIDMapper(), accident.getName(), accident.getText(), accident.getAddress(), accident.getType().getId()));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 }
