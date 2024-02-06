@@ -2,7 +2,6 @@ package ru.job4j.accidents.repository;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.mapper.AccidentListMapper;
@@ -38,13 +37,9 @@ public class AccidentJdbcTemplate implements AccidentTemplate {
     @Override
     public List<Accident> getAll() {
         RulesTemplate rulesTemplate = new RulesJdbcTemplate(jdbc);
-        try {
-            return jdbc.query("select a.id id, a.name name, a.text text, a.address address, a.type_id type_id, at.name "
+        return jdbc.query("select a.id id, a.name name, a.text text, a.address address, a.type_id type_id, at.name "
                             + "type_name from accidents a, accident_type at where a.type_id = at.id",
                     new AccidentListMapper(rulesTemplate));
-        } catch (Exception e) {
-            return List.of();
-        }
     }
 
     @Override
@@ -72,22 +67,14 @@ public class AccidentJdbcTemplate implements AccidentTemplate {
 
     @Override
     public Optional<Accident> getById(int id) {
-        try {
-            return Optional.ofNullable(jdbc.queryForObject("select a.id id, a.name name, a.text text, a.address address, a.type_id type_id, at.name "
+        return Optional.ofNullable(jdbc.queryForObject("select a.id id, a.name name, a.text text, a.address address, a.type_id type_id, at.name "
                             + "type_name from accidents a, accident_type at where a.id = ? and a.type_id = at.id",
                     new AccidentMapper(), id));
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        }
     }
 
     public static Optional<Integer> getIdByNameTxtAddressType(Accident accident, JdbcTemplate jdbc) {
-        try {
-            return Optional.ofNullable(jdbc.queryForObject("select a.id idd "
+        return Optional.ofNullable(jdbc.queryForObject("select a.id idd "
                             + "from accidents a where a.name = ? and a.text = ? and a.address = ? and a.type_id = ? ",
                     new AddressTypeIDMapper(), accident.getName(), accident.getText(), accident.getAddress(), accident.getType().getId()));
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        }
     }
 }
