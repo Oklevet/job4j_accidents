@@ -11,6 +11,4 @@ public interface RulesServiceDB {
     Collection<Rule> findAllRules();
 
     Optional<Rule> findById(int id);
-
-    Collection<Rule> findByAcc(int id);
 }

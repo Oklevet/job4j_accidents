@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public interface AccidentServiceDB {
 
-    void create(Accident accident, String[] ids);
+    Accident create(Accident accident, List<Integer> rulesId);
 
     List<Accident> findAll();
 
-    boolean update(Accident accident, String[] ids);
+    boolean update(Accident accident, List<Integer> rulesId);
 
     Optional<Accident> getById(int id);
 }

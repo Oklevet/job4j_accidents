@@ -4,7 +4,7 @@ import ru.job4j.accidents.model.AccidentType;
 import java.util.Collection;
 import java.util.Optional;
 
-public interface TypesTemplate {
+public interface TypesStore {
 
     Collection<AccidentType> findAllTypes();
 
