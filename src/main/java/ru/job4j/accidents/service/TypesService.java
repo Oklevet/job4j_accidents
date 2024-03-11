@@ -2,25 +2,26 @@ package ru.job4j.accidents.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.accidents.model.AccidentType;
-import ru.job4j.accidents.repository.TypesStore;
+import ru.job4j.accidents.repository.TypesRepository;
 
 import java.util.Collection;
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class SimpleTypesServiceDB implements TypesServiceDB {
+public class TypesService {
 
-    TypesStore typesStore;
+    TypesRepository typesRepository;
 
-    @Override
+    @Transactional
     public Collection<AccidentType> findAllTypes() {
-        return typesStore.findAllTypes();
+        return (Collection<AccidentType>) typesRepository.findAll();
     }
 
-    @Override
+    @Transactional
     public Optional<AccidentType> findById(int id) {
-        return typesStore.findById(id);
+        return typesRepository.findById(id);
     }
 }

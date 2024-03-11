@@ -2,25 +2,26 @@ package ru.job4j.accidents.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.accidents.model.Rule;
-import ru.job4j.accidents.repository.RulesStore;
+import ru.job4j.accidents.repository.RulesRepository;
 
 import java.util.Collection;
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class SimpleRulesServiceDB implements RulesServiceDB {
+public class RulesService {
 
-    RulesStore rulesStore;
+    RulesRepository rulesRepository;
 
-    @Override
+    @Transactional
     public Collection<Rule> findAllRules() {
-        return rulesStore.findAllRules();
+        return (Collection<Rule>) rulesRepository.findAll();
     }
 
-    @Override
+    @Transactional
     public Optional<Rule> findById(int id) {
-        return rulesStore.findById(id);
+        return rulesRepository.findById(id);
     }
 }

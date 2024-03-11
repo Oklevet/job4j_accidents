@@ -5,12 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.accidents.model.Accident;
-import ru.job4j.accidents.model.Rule;
-import ru.job4j.accidents.repository.RulesStore;
-import ru.job4j.accidents.repository.TypesStore;
-import ru.job4j.accidents.service.AccidentServiceDB;
-import ru.job4j.accidents.service.RulesServiceDB;
-import ru.job4j.accidents.service.TypesServiceDB;
+import ru.job4j.accidents.service.AccidentService;
+import ru.job4j.accidents.service.RulesService;
+import ru.job4j.accidents.service.TypesService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -19,22 +16,22 @@ import java.util.Optional;
 @Controller
 @AllArgsConstructor
 public class AccidentController {
-    private final AccidentServiceDB accidentServiceDB;
+    private final AccidentService accidentService;
 
-    private TypesServiceDB typesServiceDB;
+    private TypesService typesService;
 
-    private RulesServiceDB rulesServiceDB;
+    private RulesService rulesService;
 
     @GetMapping({"/accidents"})
     public String getIndex(Model model) {
-        model.addAttribute("accidents", accidentServiceDB.findAll());
+        model.addAttribute("accidents", accidentService.getAll());
         return "accidents";
     }
 
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
-        model.addAttribute("types", typesServiceDB.findAllTypes());
-        model.addAttribute("rules", rulesServiceDB.findAllRules());
+        model.addAttribute("types", typesService.findAllTypes());
+        model.addAttribute("rules", rulesService.findAllRules());
         return "create/createAccident";
     }
 
@@ -42,7 +39,7 @@ public class AccidentController {
     public String save(@ModelAttribute Accident accident, HttpServletRequest req,
                        Model model, @RequestParam(name = "rIds") List<Integer> rulesId) {
         try {
-            accidentServiceDB.create(accident, rulesId);
+            accidentService.create(accident, rulesId);
             return "redirect:/accidents";
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
@@ -52,13 +49,13 @@ public class AccidentController {
 
     @GetMapping("/editAccident")
     public String edit(@RequestParam("id") int id, Model model) {
-        Optional<Accident> optAccident = accidentServiceDB.getById(id);
+        Optional<Accident> optAccident = accidentService.getById(id);
         if (optAccident.isEmpty()) {
             model.addAttribute("message", "Инцидент с указанным идентификатором не найден");
             return "errors/404";
         }
-        model.addAttribute("types", typesServiceDB.findAllTypes());
-        model.addAttribute("rules", rulesServiceDB.findAllRules());
+        model.addAttribute("types", typesService.findAllTypes());
+        model.addAttribute("rules", rulesService.findAllRules());
         model.addAttribute("accident", optAccident.get());
         return "create/editAccident";
     }
@@ -66,7 +63,7 @@ public class AccidentController {
     @PostMapping("/updateAccident")
     public String update(@ModelAttribute Accident accident, Model model, HttpServletRequest req,
                          @RequestParam(name = "rIds") List<Integer> rulesId) {
-        var isUpdated = accidentServiceDB.update(accident, rulesId);
+        var isUpdated = accidentService.update(accident, rulesId);
         if (!isUpdated) {
             model.addAttribute("message", "Инцидент с указанным идентификатором не найден");
             return "errors/404";
