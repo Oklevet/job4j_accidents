@@ -10,6 +10,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "users")
 @Getter
+@Setter
 @Entity
 public class User {
 
@@ -24,7 +25,7 @@ public class User {
 
     private boolean enabled;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "authoritie_id")
-    private Authoritie authoritie;
+    @ManyToOne
+    @JoinColumn(name = "authority_id")
+    private Authority authority;
 }

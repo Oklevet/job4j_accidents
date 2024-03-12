@@ -10,8 +10,9 @@ import javax.persistence.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "authorities")
 @Getter
+@Setter
 @Entity
-public class Authoritie {
+public class Authority {
 
     @Id
     @EqualsAndHashCode.Include

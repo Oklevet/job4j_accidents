@@ -43,7 +43,8 @@ public class AccidentService {
         try {
             accidentRepository.save(accident);
             return true;
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }
