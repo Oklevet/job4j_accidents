@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.model.Rule;
 import ru.job4j.accidents.repository.AccidentRepository;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
