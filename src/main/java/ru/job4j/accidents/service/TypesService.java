@@ -11,16 +11,15 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class TypesService {
 
     TypesRepository typesRepository;
 
-    @Transactional
     public Collection<AccidentType> findAllTypes() {
         return (Collection<AccidentType>) typesRepository.findAll();
     }
 
-    @Transactional
     public Optional<AccidentType> findById(int id) {
         return typesRepository.findById(id);
     }

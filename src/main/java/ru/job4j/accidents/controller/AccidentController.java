@@ -1,6 +1,7 @@
 package ru.job4j.accidents.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,12 +25,14 @@ public class AccidentController {
 
     @GetMapping({"/accidents"})
     public String getIndex(Model model) {
+        model.addAttribute("user", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         model.addAttribute("accidents", accidentService.getAll());
         return "accidents";
     }
 
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
+        model.addAttribute("user", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         model.addAttribute("types", typesService.findAllTypes());
         model.addAttribute("rules", rulesService.findAllRules());
         return "create/createAccident";
@@ -49,6 +52,7 @@ public class AccidentController {
 
     @GetMapping("/editAccident")
     public String edit(@RequestParam("id") int id, Model model) {
+        model.addAttribute("user", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         Optional<Accident> optAccident = accidentService.getById(id);
         if (optAccident.isEmpty()) {
             model.addAttribute("message", "Инцидент с указанным идентификатором не найден");
