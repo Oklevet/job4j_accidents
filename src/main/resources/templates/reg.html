@@ -46,7 +46,7 @@
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <!--    <img class="mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">-->
         <h1 class="h3 mb-3 fw-normal">Пожалуйста, зарегистрируйтесь</h1>
-        <div th:if="${not #lists.isEmpty(errorMessage)}" class="form-floating alert alert-danger p-1" role="alert" th:text="${errorMessage}">
+        <div th:if="${not #lists.isEmpty(notificationMessage)}" class="form-floating alert alert-danger p-1" role="alert" th:text="${notificationMessage}">
         </div>
         <div class="form-floating">
             <input type="text" class="form-control input-head" id="username" placeholder="имя пользователя" name="username" oninput="checkPasswords()">
